@@ -18,16 +18,18 @@ struct CountedSet<Element: Hashable> {
     }
     
     // remove
-    mutating func remove(_ element: Element) {
-        guard let counts = elements[element] else { return }
-        if counts == 1 {
+    mutating func remove(_ element: Element) -> Int {
+        guard let counts = elements[element] else { return 0 }
+        if counts == 0 {
             elements.removeValue(forKey: element)
         } else {
-            self.elements[element, default: 0] -= 1
+            self.elements[element] = counts - 1
         }
+        
+        return self.elements[element]!
     }
    
-    //
+    // contains in the array
     func contains(_ element: Element) -> Bool {
         guard let items = self.elements[element] else { return false }
         return items > 0
